@@ -8,20 +8,21 @@ namespace Warshall
 
     struct Example
     {
-
+        //All of these must be square matrices
         public int[,] AdjacencyMatrix;
         public int[,] WarshallSolution; //Known solution from Mathematica
         public int[,] GraphDistanceMatrixSolution; //Known solution from Mathematica with nVertex + 1 substituting for Infinity
 
     }
 
-    class Program
+    public class Warshall
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            //FYI - you can copy and paste matrices in Normal form from Mathematica directly into C# code
             var exmpl = new Example
             {
-                AdjacencyMatrix = new [,] {{0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, {1, 0, 1, 0, 0, 0, 0, 0, 0, 0}, {0,
+                AdjacencyMatrix = new[,] {{0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, {1, 0, 1, 0, 0, 0, 0, 0, 0, 0}, {0,
                     0, 0, 1, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0,
                     1, 0, 0, 0, 0, 0, 0, 0}, {0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0,
                     0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0,
@@ -49,7 +50,7 @@ namespace Warshall
             Console.WriteLine($"There are {exmpl.AdjacencyMatrix.GetLength(0)} vertices");
             Console.WriteLine("Input adjacency matrix is:");
             Console.WriteLine(Print(exmpl.AdjacencyMatrix));
-            
+
             var reachablityMatrix = ReachabilityMatrix(exmpl.AdjacencyMatrix);
 
             //checks on size
@@ -109,7 +110,7 @@ namespace Warshall
                     for (var i = 0; i < nVertices; i++)
                     {
                         prior[i, j] = prior[i, j] || (prior[i, k] && prior[k, j]);
-                        
+
                     }
                 }
 
