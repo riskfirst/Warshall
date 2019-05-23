@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using NUnit.Framework;
+
 
 namespace Warshall
 {
@@ -38,8 +40,11 @@ namespace Warshall
             };
 
             //Check AreEqual is working
-            Console.WriteLine(AreEqual(exmpl.AdjacencyMatrix, exmpl.AdjacencyMatrix)); //true
-            Console.WriteLine(AreEqual(exmpl.AdjacencyMatrix, exmpl.GraphDistanceMatrixSolution)); //false
+            Assert.IsTrue(AreEqual(exmpl.AdjacencyMatrix, exmpl.AdjacencyMatrix));
+            Assert.IsFalse(AreEqual(exmpl.AdjacencyMatrix, exmpl.GraphDistanceMatrixSolution));
+
+            var nVertices = exmpl.AdjacencyMatrix.GetLength(0);
+            Assert.AreEqual(nVertices, exmpl.AdjacencyMatrix.GetLength(1), 0, "Matrix isn't square");
 
             Console.WriteLine($"There are {exmpl.AdjacencyMatrix.GetLength(0)} vertices");
             Console.WriteLine("Input adjacency matrix is:");
@@ -47,15 +52,26 @@ namespace Warshall
             
             var reachablityMatrix = ReachabilityMatrix(exmpl.AdjacencyMatrix);
 
+            //checks on size
+            Assert.AreEqual(nVertices, reachablityMatrix.GetLength(0));
+            Assert.AreEqual(nVertices, reachablityMatrix.GetLength(1));
+
             Console.WriteLine("Reachability matrix is (Warshall algorithm):");
             Console.WriteLine(Print(BoolToInt(reachablityMatrix)));
 
+            Assert.IsTrue(AreEqual(BoolToInt(reachablityMatrix), exmpl.WarshallSolution));
             Console.WriteLine("Equivalent to Mathematica solution?: " + AreEqual(BoolToInt(reachablityMatrix), exmpl.WarshallSolution));
 
             var gdm = GraphDistanceMatrix(exmpl.AdjacencyMatrix);
+
+            //checks on size
+            Assert.AreEqual(nVertices, gdm.GetLength(0));
+            Assert.AreEqual(nVertices, gdm.GetLength(1));
+
             Console.WriteLine("Graph Distance Matrix is (Floyd-Warshall algorithm):");
             Console.WriteLine(Print(gdm));
 
+            Assert.IsTrue(AreEqual(gdm, exmpl.GraphDistanceMatrixSolution));
             Console.WriteLine("Equivalent to Mathematica solution?: " + AreEqual(gdm, exmpl.GraphDistanceMatrixSolution));
 
             Console.WriteLine("Press any key to exit");
